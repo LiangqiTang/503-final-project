@@ -1,0 +1,75 @@
+---
+title: "Stats 503 Data Cleaning"
+author: "Lingqi Huang"
+date: "2024-04-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(foreign)
+```
+
+```{r}
+### Data for demo
+demo <- read.xport("P_DEMO.XPT")
+demo_1 <- demo[, c("SEQN", "RIAGENDR", "RIDAGEYR")]
+```
+
+```{r}
+### Data for diet
+diet <- read.xport("P_DSQTOT.XPT")
+diet_1 <- diet[, c("SEQN", "DSD010", "DSDCOUNT")]
+```
+
+```{r}
+### Data for blood pressure
+blood <- read.xport("P_BPXO.XPT")
+blood_1 <- blood[, c("SEQN", "BPXOSY1", "BPXODI1",
+                     "BPXOSY2", "BPXODI2",
+                     "BPXOSY3", "BPXODI3")]
+```
+
+```{r}
+###
+body <- read.xport("P_BMX.XPT")
+body_1 <- body[, c("SEQN", "BMXBMI")]
+```
+
+```{r}
+### 
+alco <- read.xport("P_ALQ (1).XPT")
+alco_1 <- alco[, c("SEQN", "ALQ130")]
+```
+
+```{r}
+###
+smoke <- read.xport("P_SMQ.XPT")
+smoke_1 <- smoke[, c("SEQN", "SMQ020")]
+```
+
+```{r}
+income <- read.xport("P_INQ.XPT")
+income_1 <- income[, c("SEQN", "INDFMMPI")]
+```
+
+```{r}
+combined_data <- merge(demo_1, diet_1, by = "SEQN")
+combined_data <- merge(combined_data, blood_1, by = "SEQN")
+combined_data <- merge(combined_data, body_1, by = "SEQN")
+combined_data <- merge(combined_data, alco_1, by = "SEQN")
+combined_data <- merge(combined_data, smoke_1, by = "SEQN")
+combined_data <- merge(combined_data, income_1, by = "SEQN")
+```
+
+```{r}
+combined_data <- na.omit(combined_data)
+combined_data
+```
+
+```{r}
+write.csv(combined_data, "503data.csv", row.names = FALSE)
+```
